@@ -1,38 +1,61 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+/* Fridge Class
+@author Saron Yewondwossen
+Purpose: Represents a user's fridge and stores all food items currently inside it.
+The class manages:
+- adding new items
+- removing items
+- tracking quanities and expire dates
+- searching for items
+- removing expire items
+- displaying fridge contents 
+*/
 public class Fridge 
 {
-    //name of the User who's Fridge this belongs to in application
     private String username;
-    
-    //The total count of items that a Fridge object can contain
     private int totalSpace;
-    
-    //The current count of all Items in a Fridge object
     private int currentCount;
-    
-    //Where all Items are stored
     private ArrayList<Item> allItems=new ArrayList<>();
     
-    //creates a new Fridge object with no Items within it
-    //takes user input of max number of items that can fit in a fridge and sets it equal to totalSpace
+    /**creates a new Fridge object for a specific user
+     * @param userName the given username of fridge owner
+     * @param setTotalSpace the maximum number of items the fridge can store
+     * 
+     * Precondition:
+     * setTotalSpace should be greater than 0.
+     * 
+     * Postcondition:
+     * A fridge object is created with an empty/null item list.
+    */
     public Fridge(String userName, int setTotalSpace){
         username=userName;
         totalSpace=setTotalSpace;
         currentCount=0;
     }
-    //return the name of the User who's Fridge this belongs to in application's
+    
+    /** Returns the username associated with this fridge object.
+     * 
+     * @return the fridge owner's username
+     */
     public String getUserName(){
         return username;
     }
     
     
-    //returns the max space a Fridge object can contain
+    /**Returns the maximum space a fridge can hold
+     * 
+     * @return the total number of items the fridge can hold
+     */
     public int getTotalSpace(){
         return totalSpace;
     }
     
-    //returns the current number of items in Fridge object
+    /**Calculate the total quanityt of all items currently stored in this fridge object
+     * 
+     * @return the total number of stored items
+     */
     public int getCurrentCount(){
         if (allItems.size()==0){
             return 0;
@@ -44,9 +67,12 @@ public class Fridge
         return currentCount;
     }
     
-    //returns a list of all items with an existing count in Fridge object
+    /**Creates and return a formatted String containing all items currently stored in this fridge
+     * 
+     * @return a formatted list of fridge contents
+     */
     public String seeContents(){
-        String allContents= ("\t---------------- Items In Fridge----------------\n"); 
+        String allContents= "\n\t---------------- Items In Fridge ----------------\n"; 
         if (allItems.size()==0){
             allContents="There are no items currently in your fridge";
         }
@@ -55,59 +81,105 @@ public class Fridge
                 allContents+="\t" +allItems.get(i).toString()+"\n";
             }
         }
-        allContents+="\t-------------------------------";
+        allContents+="\t-------------------------------------------------";
         return allContents;
     } 
     
-    //returns name, count, and exp data of all items with the same name as parameter 
+    /**Searches the fridge object for all items with the specified name
+     * 
+     * @param itemName the name of the item being searched for
+     * @return a formatted String containing matching items
+     */
     public String searchForItem(String itemName){
-        String requestedItem="";
+        LocalDate matchNoExpDate=LocalDate.of(1111,11,1);
+        String requestedItem="\n\t------------------ Requested Item --------------------\n";
         for (int i=0;i<allItems.size();i++){
-            if (allItems.get(i).getName().equalsIgnoreCase(itemName)){
-                requestedItem+=allItems.get(i).toString();
+            if (allItems.get(i).getName().equalsIgnoreCase(itemName)&& !allItems.get(i).getExpireDate().equals(matchNoExpDate)){
+                requestedItem+="\t"+ allItems.get(i).toString()+"\n";
             }
         }
+        requestedItem+="\t------------------------------------------------------\n";
         return requestedItem;
     }
     
-    //adds Item object to Fridge Object arrayList
+    /**Adds an Item object to this fridge object
+     * 
+     * @param newItem the item to add to the fridge
+     * 
+     * Precondition:
+     * The fridge must have enough remaining space.
+     *
+     * Postcondition:
+     * The item is added to the fridge item list.
+     */
     public void addItem(Item newItem){
-            allItems.add(newItem);
+        allItems.add(newItem);
         
     }
     
-    //removes Item object from Fridge Object arrayList
-    public void removeItem(Item newItem){
-            allItems.remove(newItem);
+    /**Reduces the quantity of a matching item in the fridge.
+     *
+     * @param name the name of the item being removed
+     * @param expireDate the expiration date of the item
+     *
+     * Precondition:
+     * A matching item must exist in the fridge.
+     *
+     * Postcondition:
+     * The quantity of the matching item is reduced by 1.
+     */
+    public void removeUsedItem(String name, LocalDate expDate){
+        LocalDate matchNoExpDate=LocalDate.of(1111,11,1);
+        String message="";
+        for (int i=0; i<allItems.size();i++){
+            if (allItems.get(i).getName().equals(name)&& allItems.get(i).getExpireDate().equals(expDate)&& !allItems.get(i).getExpireDate().equals(matchNoExpDate)){
+                allItems.get(i).reduceCount(1);
+            }
+        }
     }
     
-    //returns arrayList of Items in Fridge object
+    /**Returns the ArrayList containing all items from this fridge object.
+     *
+     * @return the fridge item ArrayList
+     */
     public ArrayList<Item> getFridgeArray(){
         return allItems;
     }
     
-    //removes Items with expireDates before the current day when method is called
-    //it will not remove items that have no expire date set
-    //more usefull when generating grocery list
+    /**Removes all expired items from the fridge.
+     *
+     * Postcondition:
+     * All items with expiration dates before the current date are removed from the fridge.
+     */
     public void removeExpiredItems(){
         LocalDate today = LocalDate.now();
+        LocalDate matchNoExpDate=LocalDate.of(1111,11,1);
         for (int i=0;i<allItems.size();i++){
-            if (allItems.get(i).getExpireDate().isBefore(today)&& !allItems.get(i).getExpireDate().equals(null)){
+            if (allItems.get(i).getExpireDate().isBefore(today)&& !allItems.get(i).getExpireDate().equals(matchNoExpDate)){
                 allItems.remove(i);
             }
         }
     }
     
+    /**Removes all expired items from the fridge.
+     *
+     * Postcondition:
+     * All items with expiration dates before the current date are removed from the fridge.
+     * 
+     * @return a String with a formatted list of expired items to remove
+     */
     public String expiredItemsRemovalMessage(){
-        String removalMessage="";
+        String removalMessage="\n\t------------------- Expired Items -----------------------\n";
         LocalDate today = LocalDate.now();
+        LocalDate matchNoExpDate=LocalDate.of(1111,11,1);
         for (int i=0;i<allItems.size();i++){
-            if (allItems.get(i).getExpireDate().isBefore(today)&& !allItems.get(i).getExpireDate().equals(null)){
+            if (allItems.get(i).getExpireDate().isBefore(today)&& !allItems.get(i).getExpireDate().equals(matchNoExpDate)){
+                removalMessage+= "\tPlease remove " + allItems.get(i).getCount()+" "+ allItems.get(i).getName()+" from your fridge; they have expired\n";
                 allItems.remove(i);
-                removalMessage+= "Please remove " + allItems.get(i).getCount()+" "+ allItems.get(i).getName()+" from your fridge; they have expired\n";
             }
         }
-    return removalMessage;
+        removalMessage+="\t---------------------------------------------------------\n";
+        return removalMessage;
     }
 
 }

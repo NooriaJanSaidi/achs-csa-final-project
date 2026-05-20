@@ -1,59 +1,110 @@
-//allows dates to be set as an object
 import java.time.LocalDate;
+
+/* Item Class
+@author Saron Yewondwossen
+Purpose: Represents a food item, grouped by expiration date, stored inside a fridge
+Each items contains:
+- a name
+- a quantity(count)
+- an expiration date
+The class manages:
+- returning item names, counts, and expireDates
+- formating item when called upon
+*/
 public class Item {
     
-    //the number of items under the same name and expire date
     private int count;
-    
-    //the expire date of that item
     private LocalDate expireDate;
-    
-    //the name of the item
     private String name;
     
-    //creates a new Item object under a certain name, expire date, and count
+    /**Creates a new Item object with a name, quantity,
+     * and expiration date.
+     *
+     * @param itemName the item name
+     * @param currentCountInFridge the quantity of the item
+     * @param expYear the expiration year of the item
+     * @param expMonth the expiration month of the item
+     * @param expDay the expiration day of the item.
+     * 
+     * Precondition:
+     * count should be greater than or equal to 0.
+     * expYear, expMonth, expDay must all be valid date values.
+     *
+     * Postcondition:
+     * A new Item object is initialized.
+     */
     public Item(String itemName,int currentCountInFridge, int expYear, int expMonth, int expDay){
         count=currentCountInFridge;
         name=itemName;
         expireDate=LocalDate.of(expYear,expMonth,expDay);
     }
-    //creates a new Item under only a certain name
-    //useful for when user needs an item to be in fridge, but none is currently within in
+    
+    /**Creates a new Item object with only a name, useful for items that should be in fridge but aren't
+     *
+     * @param itemName the item name
+     *
+     * Postcondition:
+     * A new Item object is initialized.
+     */
     public Item(String itemName){
         name=itemName;
         count=0;
-        expireDate=null;
+        expireDate=LocalDate.of(1111,11,1);
     }
-    //returns the number of items under the same name and expire date
+    
+    /**Returns the quantity of the item.
+     *
+     * @return the item count
+     */    
     public int getCount(){
         return count;
     }
     
-    //returns the name of that item
+    /**Returns the name of the item.
+     *
+     * @return the item name
+     */
     public String getName(){
         return name;
     }
-    //returns the expire date of that item in year, month, day format
+    
+    /**Returns the expiration date of the item.
+     *
+     * @return the item's expiration date
+     */
     public LocalDate getExpireDate(){
         return expireDate;
     }
     
-    //set the current number of items under the same name and expire date to a certain count
-    public void setCount(int newCount){
-        count=newCount;
-    }
-    
-    //increased the count of the item by a given amount
+    /**Increases the quantity of the item.
+     *
+     * @param additionalCount the amount to add to the count
+     *
+     * Postcondition:
+     * The item count is increased by additionalCount.
+     */
     public void addCount(int additionalCount){
         count+=additionalCount;
     }
     
-    //reduces the count of item by a given amount
+    /**Decreases the quantity of the item.
+     *
+     * @param removalCount the amount to remove from the count
+     *
+     * Precondition:
+     * removalCount should be less than or equal to the current count.
+     *
+     * Postcondition:
+     * The item count is decreased by removalCount.
+     */
     public void reduceCount(int removalCount){
         count-=removalCount;
     }
     
-    //when an Item is printed via a S.O.P call, this method formats it in a specific way
+    /**Returns a formatted String representation of the item.
+     *
+     * @return a formatted item description of each Item, grouped by expiration date
+     */
     public String toString(){
         return name + ": \t Count: "+ count + "\t Expire Date: " + expireDate;
     }
