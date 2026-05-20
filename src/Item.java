@@ -1,7 +1,8 @@
 import java.time.LocalDate;
 
 /* Item Class
-@author Saron Yewondwossen
+@author Primary Author Saron Yewondwossen
+@author Assisted Author Nooria Jan Saidi
 Purpose: Represents a food item, grouped by expiration date, stored inside a fridge
 Each items contains:
 - a name

@@ -2,7 +2,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 /* Fridge Class
-@author Saron Yewondwossen
+@author Primary Author Saron Yewondwossen
+@author Assisted Author Nooria Jan Saidi
 Purpose: Represents a user's fridge and stores all food items currently inside it.
 The class manages:
 - adding new items
@@ -132,7 +133,7 @@ public class Fridge
         LocalDate matchNoExpDate=LocalDate.of(1111,11,1);
         String message="";
         for (int i=0; i<allItems.size();i++){
-            if (allItems.get(i).getName().equals(name)&& allItems.get(i).getExpireDate().equals(expDate)&& !allItems.get(i).getExpireDate().equals(matchNoExpDate)){
+            if (allItems.get(i).getName().equalsIgnoreCase(name)&& allItems.get(i).getExpireDate().equals(expDate)&& !allItems.get(i).getExpireDate().equals(matchNoExpDate)){
                 allItems.get(i).reduceCount(1);
             }
         }

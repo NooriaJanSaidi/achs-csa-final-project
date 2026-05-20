@@ -2,7 +2,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 /* GroceryList Class
-@Author Saron Yewondwossen
+@author Primary Author Saron Yewondwossen
+@author Assisted Author Nooria Jan Saidi
 Purpose: Represents a govery list containing items that need to be bought(items that have reached count 0)
 Items are added when:
 - an item(with potentially more than 1 quantity) expires and there are no more of that item
